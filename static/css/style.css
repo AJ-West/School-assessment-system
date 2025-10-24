@@ -47,6 +47,10 @@ span, td, td.dt-type-numeric {
     background-color: lime;
 }
 
+.excel{
+    background-color: lightskyblue;
+}
+
 .fail{
     background-color: yellow;
 }

@@ -144,10 +144,11 @@ $(document).ready(function(){
         var on_track = 'yes'
         for(var i=2; i < 9; i++){
             $(table.cell(row,i).node()).removeClass('pass fail')
-            if(table.cell(row,i).data().includes('@-')){
+            if(table.cell(row,i).data().includes('@-') && !table.cell(row,i).data().includes('*')){
                 $(table.cell(row,i).node()).addClass('fail')
                 on_track = 'no'
             }
+            else if (table.cell(row,i).data().includes('@*')){$(table.cell(row,i).node()).addClass('excel')}
             else if (table.cell(row,i).data().includes('@')){$(table.cell(row,i).node()).addClass('pass')}
         }
         table.cell(row,9).data(on_track).draw()
@@ -159,17 +160,25 @@ $(document).ready(function(){
         var on_track = 'yes'
         for(var i=5; i < 8; i++){
             $(table.cell(row,i).node()).removeClass('pass fail')
-            if(table.cell(row,i).data().includes('@-')){
+            if(table.cell(row,i).data().includes('@-') && !table.cell(row,i).data().includes('*')){
                 $(table.cell(row,i).node()).addClass('fail')
                 on_track = 'no'
             }
+            else if (table.cell(row,i).data().includes('@*')){$(table.cell(row,i).node()).addClass('excel')}
             else if (table.cell(row,i).data().includes('@')){$(table.cell(row,i).node()).addClass('pass')}
         }
+        $(table.cell(row,8).node()).removeClass('pass fail')
         table.cell(row,8).data(on_track).draw()
         if (on_track == 'yes'){$(table.cell(row,8).node()).addClass('pass')}
         else{$(table.cell(row,8).node()).addClass('fail')}
+
+        $(table.cell(row,4).node()).removeClass('pass fail')
+        if (table.cell(row,4).data().includes('no')){
+            $(table.cell(row,4).node()).addClass('fail')}
+        else{$(table.cell(row,4).node()).addClass('pass')}
         
         // check the phonics score
+        $(table.cell(row,9).node()).removeClass('pass fail')
         if(parseInt(table.cell(row,9).data()) < 32){
             $(table.cell(row,9).node()).addClass('fail')
             on_track = 'no'
@@ -181,22 +190,36 @@ $(document).ready(function(){
         var on_track = 'yes'
         for(var i=6; i < 9; i++){
             $(table.cell(row,i).node()).removeClass('pass fail')
-            if(table.cell(row,i).data().includes('@-')){
+            if(table.cell(row,i).data().includes('@-') && !table.cell(row,i).data().includes('*')){
                 $(table.cell(row,i).node()).addClass('fail')
                 on_track = 'no'
             }
+            else if (table.cell(row,i).data().includes('@*')){$(table.cell(row,i).node()).addClass('excel')}
             else if (table.cell(row,i).data().includes('@')){$(table.cell(row,i).node()).addClass('pass')}
         }
+
+        $(table.cell(row,10).node()).removeClass('pass fail')
+        if(table.cell(row,10).data().includes('@-') && !table.cell(row,10).data().includes('*')){$(table.cell(row,10).node()).addClass('fail')}
+        else if (table.cell(row,10).data().includes('@*')){$(table.cell(row,10).node()).addClass('excel')}
+        else if (table.cell(row,10).data().includes('@')){$(table.cell(row,10).node()).addClass('pass')}
+
+        $(table.cell(row,9).node()).removeClass('pass fail')
         table.cell(row,9).data(on_track).draw()
         if (on_track == 'yes'){$(table.cell(row,9).node()).addClass('pass')}
         else{$(table.cell(row,9).node()).addClass('fail')}
 
+        $(table.cell(row,4).node()).removeClass('pass fail')
+        if (table.cell(row,4).data().includes('no')){
+            $(table.cell(row,4).node()).addClass('fail')}
+        else{$(table.cell(row,4).node()).addClass('pass')}
+
         // check the phonics score
+        $(table.cell(row,5).node()).removeClass('pass fail')
         if(parseInt(table.cell(row,5).data()) < 32){
             $(table.cell(row,5).node()).addClass('fail')
             on_track = 'no'
         }
-        else if (parseInt(table.cell(row,5).data()) < 32){$(table.cell(row,5).node()).addClass('pass')}
+        else if (parseInt(table.cell(row,5).data()) >= 32){$(table.cell(row,5).node()).addClass('pass')}
     }
 
     function add_row(){
@@ -205,6 +228,7 @@ $(document).ready(function(){
         if(table_stage != 'foundation'){
             removed +=1
             table.row(':last').remove().draw();}
+            console.log(removed)
         switch (table_stage){
             case "foundation":
                 table.row.add({"Pupils" : "", "Group" : "", "C&L": "", "PD": "", "PSED": "", "L": "", "M": "", "UoW": "", "EAD": "", "On track for GLD": ""}).draw()
@@ -220,45 +244,31 @@ $(document).ready(function(){
         add_on_track_row()
     }
 
-    /*function add_row(){
-        var newrow;
-        switch (table_stage){
-            case "foundation":
-                newrow = {"Pupils": "1", "Group": "1", "C&L": "1", "PD": "1", "PSED": "1", "L": "1", "M": "1", "UoW": "1", "EAD": "1", "On track for GLD": "1"}
-                break
-            case "ks1":
-                newrow = {'Pupils': "1", 'R/W': "1", 'M': "1", 'Group': "1", 'GLD (yes/no)': "1", 'Reading': "1", 'Writing': "1", 'Maths': "1", 'Combined (yes/no)': "1", 'Phonics (scores/40)': "1"}
-                break
-            default:
-                newrow = {'Pupils': "", 'R/W': "", 'M': "", 'Group': "", 'GLD (yes/no)': "", 'Phonics (scores/40)': "", 'Reading': "", 'Writing': "", 'Maths': "", 'Combined (yes/no)': "", 'Grammer': "", 'TTables (score/25)': ""}
-                break
-        }       
-        table.row(':last').remove().draw();
-        if(table_stage != 'foundation'){table.row(':last').remove().draw();}
-        table.row.add(newrow).draw(false)
-        document.querySelectorAll('td').forEach(cell => {cell.contentEditable = true})
-        add_on_track_row()
-    }*/
-
     function add_on_track_row(){
         var newrow;
         switch (table_stage){
             case "foundation":
                 all = populate_on_track_row_foundation()
                 newrow = {"Pupils": "N/A", "Group": "N/A", "C&L": all[0], "PD": all[1], "PSED": all[2], "L": all[3], "M": all[4], "UoW": all[5], "EAD": all[6], "On track for GLD": all[7]}
+                table.row.add(newrow).draw()
                 break
             case "ks1":
                 all = populate_on_track_row_ks1()
-                newrow = {'Pupils': "N/A", 'R/W': "N/A", 'M': "N/A", 'Group': "N/A", 'GLD (yes/no)': "N/A", 'Reading': all[0], 'Writing': all[1], 'Maths': all[2], 'Combined (yes/no)': all[3], 'Phonics (scores/40)': all[4]}
+                newrow = {'Pupils': "N/A", 'R/W': "N/A", 'M': "N/A", 'Group': "N/A", 'GLD (yes/no)': all[0], 'Reading': all[1], 'Writing': all[2], 'Maths': all[3], 'Combined (yes/no)': all[4], 'Phonics (scores/40)': all[5]}
+                table.row.add(newrow).draw()
+                all = populate_excel_on_track_row_ks1()
+                newrow = {'Pupils': "N/A", 'R/W': "N/A", 'M': "N/A", 'Group': "N/A", 'GLD (yes/no)': "N/A", 'Reading': all[0], 'Writing': all[1], 'Maths': all[2], 'Combined (yes/no)': "N/A", 'Phonics (scores/40)': "N/A"}
                 table.row.add(newrow).draw()
                 break
             default:
                 all = populate_on_track_row_ks2()
-                newrow = {'Pupils': "N/A", 'R/W': "N/A", 'M': "N/A", 'Group': "N/A", 'GLD (yes/no)': "N/A", 'Phonics (scores/40)': all[0], 'Reading': all[1], 'Writing': all[2], 'Maths': all[3], 'Combined (yes/no)': all[4], 'Grammer': all[5], 'TTables (score/25)': all[6]}
+                newrow = {'Pupils': "N/A", 'R/W': "N/A", 'M': "N/A", 'Group': "N/A", 'GLD (yes/no)': all[0], 'Phonics (scores/40)': all[1], 'Reading': all[2], 'Writing': all[3], 'Maths': all[4], 'Combined (yes/no)': all[5], 'Grammer': all[6], 'TTables (score/25)': all[7]}
+                table.row.add(newrow).draw()
+                all = populate_excel_on_track_row_ks2()
+                newrow = {'Pupils': "N/A", 'R/W': "N/A", 'M': "N/A", 'Group': "N/A", 'GLD (yes/no)': "N/A", 'Phonics (scores/40)': "N/A", 'Reading': all[0], 'Writing': all[1], 'Maths': all[2], 'Combined (yes/no)': "N/A", 'Grammer': all[3], 'TTables (score/25)': "N/A"}
                 table.row.add(newrow).draw()
                 break
         }        
-        table.row.add(newrow).draw()
     }
 
     function update_percentages(){
@@ -268,78 +278,167 @@ $(document).ready(function(){
     }
 
     function populate_on_track_row_foundation(){
-        var rows = table.rows().count() 
         var all = []
-        for(var i=2; i<10;i++){
-            var track_count = 0
-            for(var j=0; j <= rows+removed-1; j++)
-                if(table.cell(j,i).data() != undefined){
-                    if(!(table.cell(j,i).data().includes('@-') || table.cell(j,i).data().includes('no'))){track_count += 1}
-                }
-            var percentage = Math.round((track_count/(rows)) *100) + '%'
-            all.push(percentage)
-            //table.cell(table.rows().count()-1,i).data(percentage).draw()
+        var rows = table.rows().count()
+        var all_count = [0,0,0,0,0,0,0,0]
+        table.rows().every(function(){
+            if(this.data()['C&L'] != undefined){
+                if(!((this.data()['C&L'].includes('@-') && !this.data()['C&L'].includes('*')))){all_count[0] += 1}
+            }
+            if(this.data()['PD'] != undefined){
+                if(!((this.data()['PD'].includes('@-') && !this.data()['PD'].includes('*')))){all_count[1] += 1}
+            }
+            if(this.data()['PSED'] != undefined){
+                if(!((this.data()['PSED'].includes('@-') && !this.data()['PSED'].includes('*')))){all_count[2] += 1}
+            }
+            if(this.data()['L'] != undefined){
+                if(!((this.data()['L'].includes('@-') && !this.data()['L'].includes('*')))){all_count[3] += 1}
+            }
+            if(this.data()['M'] != undefined){
+                if(!((this.data()['M'].includes('@-') && !this.data()['M'].includes('*')))){all_count[4] += 1}
+            }
+            if(this.data()['UoW'] != undefined){
+                if(!((this.data()['UoW'].includes('@-') && !this.data()['UoW'].includes('*')))){all_count[5] += 1}
+            }
+            if(this.data()['EAD'] != undefined){
+                if(!((this.data()['EAD'].includes('@-') && !this.data()['EAD'].includes('*')))){all_count[6] += 1}
+            }
+            if(this.data()['On track for GLD'] != undefined){
+                if(!this.data()['On track for GLD'].includes('no')){all_count[7] += 1}
+            }
+            
+        })
+        for(let value of all_count){
+                all.push(Math.round((value/(rows)) *100) + '%')
         }
         return all
     }
 
     function populate_on_track_row_ks1(){
-        var rows = table.rows().count()
         var all = []
-        for(var i=5; i<9;i++){
-            var track_count = 0
-            for(var j=0; j < rows+removed; j++){
-                if(table.cell(j,i).data() != undefined){
-                    if(!(table.cell(j,i).data().includes('@-') || table.cell(j,i).data().includes('no'))){track_count += 1}
-                }
+        var rows = table.rows().count()
+        var all_count = [0,0,0,0,0,0,0]
+        table.rows().every(function(){
+            console.log("here")
+            if(this.data()['GLD (yes/no)'] != undefined){
+                if(!this.data()['GLD (yes/no)'].includes('no')){all_count[0] += 1}
             }
-            var percentage = Math.round((track_count/(rows)) *100) + '%'
-            all.push(percentage)
-        }
-        //phonics
-        track_count = 0
-        for(var j=0; j < rows+removed; j++){
-            if(table.cell(j,i).data() != undefined){
-                if(!(parseInt(table.cell(j,9).data()) < 32)){track_count += 1}
+            if(this.data()['Reading'] != undefined){
+                if(!((this.data()['Reading'].includes('@-') && !this.data()['Reading'].includes('*')))){all_count[1] += 1}
             }
+            if(this.data()['Writing'] != undefined){
+                if(!((this.data()['Writing'].includes('@-') && !this.data()['Writing'].includes('*')))){all_count[2] += 1}
+            }
+            if(this.data()['Maths'] != undefined){
+                if(!((this.data()['Maths'].includes('@-') && !this.data()['Maths'].includes('*')))){all_count[3] += 1}
+            }
+            if(this.data()['Combined (yes/no)'] != undefined){
+                if(!this.data()['Combined (yes/no)'].includes('no')){all_count[4] += 1}
+            }
+            if(this.data()['Phonics (scores/40)'] != undefined){
+                if(!(parseInt(this.data()['Phonics (scores/40)']) < 32)){all_count[5] += 1}
+            }
+        })
+        var i =0 
+        for(let value of all_count){
+            if(i != 7)
+                all.push(Math.round((value/(rows)) *100) + '%')
+            else
+                all.push((value/(rows)).toFixed(2))
+            i++
         }
-        percentage = Math.round((track_count/(rows)) *100) + '%'
-        all.push(percentage)
         return all
     }
 
     function populate_on_track_row_ks2(){
         var all = []
         var rows = table.rows().count()
-        //phonics
-        track_count = 0
-        for(var j=0; j < rows+removed; j++)
-            if(table.cell(j,i).data() != undefined){
-                if(!(parseInt(table.cell(j,5).data()) < 32)){track_count += 1}
+        var all_count = [0,0,0,0,0,0,0]
+        table.rows().every(function(){
+            console.log("here")
+            if(this.data()['GLD (yes/no)'] != undefined){
+                if(!this.data()['GLD (yes/no)'].includes('no')){all_count[0] += 1}
             }
-        var percentage = Math.round((track_count/(rows)) *100) + '%'
-        all.push(percentage)
-
-        
-        for(var i=6; i<11;i++){
-            var track_count = 0
-            for(var j=0; j < rows+removed; j++)
-                if(table.cell(j,i).data() != undefined){
-                    if(!(table.cell(j,i).data().includes('@-') || table.cell(j,i).data().includes('no'))){track_count += 1}
-                }
-            var percentage = Math.round((track_count/(rows)) *100) + '%'
-            all.push(percentage)
-        }
-
-        //times tables
-        var total = 0
-        for(var j=0; j < rows+removed; j++){
-            if(table.cell(j,i).data() != undefined){
-                total += parseInt(table.cell(j,11).data())
+            if(this.data()['Phonics (scores/40)'] != undefined){
+                if(!(parseInt(this.data()['Phonics (scores/40)']) < 32)){all_count[1] += 1}
             }
+            if(this.data()['Reading'] != undefined){
+                if(!((this.data()['Reading'].includes('@-') && !this.data()['Reading'].includes('*')))){all_count[2] += 1}
+            }
+            if(this.data()['Writing'] != undefined){
+                if(!((this.data()['Writing'].includes('@-') && !this.data()['Writing'].includes('*')))){all_count[3] += 1}
+            }
+            if(this.data()['Maths'] != undefined){
+                if(!((this.data()['Maths'].includes('@-') && !this.data()['Maths'].includes('*')))){all_count[4] += 1}
+            }
+            if(this.data()['Combined (yes/no)'] != undefined){
+                if(!this.data()['Combined (yes/no)'].includes('no')){all_count[5] += 1}
+            }
+            if(this.data()['Grammer'] != undefined){
+                if(!((this.data()['Grammer'].includes('@-') && !this.data()['Grammer'].includes('*')))){all_count[6] += 1}
+            }
+            if(this.data()['TTables (score/25)'] != undefined){
+                console.log("total")
+                console.log(this.data()['TTables (score/25)'])
+                console.log(all_count[7])
+                if(all_count[7] == undefined){all_count[7] = 0}
+                all_count[7] += parseInt(this.data()['TTables (score/25)'])
+            }
+        })
+        console.log(all_count)
+        var i =0 
+        for(let value of all_count){
+            if(i != 7)
+                all.push(Math.round((value/(rows)) *100) + '%')
+            else
+                all.push((value/(rows)).toFixed(2))
+            i++
         }
-        var average = (total/(rows)).toFixed(2)
-        all.push(average)
+        return all
+    }
+
+    function populate_excel_on_track_row_ks1(){
+        var all = []
+        var rows = table.rows().count()-1
+        var all_count = [0,0,0]
+        table.rows().every(function(){
+            if(this.data()['Reading'] != undefined){
+                if(this.data()['Reading'].includes('@*')){all_count[0] += 1}
+            }
+            if(this.data()['Writing'] != undefined){
+                if(this.data()['Writing'].includes('@*')){all_count[1] += 1}
+            }
+            if(this.data()['Maths'] != undefined){
+                if(this.data()['Maths'].includes('@*')){all_count[2] += 1}
+            }
+        })
+        for(let value of all_count){
+            all.push(Math.round((value/(rows)) *100) + '%')
+        }
+        return all
+    }
+
+    function populate_excel_on_track_row_ks2(){
+        var all = []
+        var rows = table.rows().count()-1
+        var all_count = [0,0,0,0]
+        table.rows().every(function(){
+            if(this.data()['Reading'] != undefined){
+                if(this.data()['Reading'].includes('@*')){all_count[0] += 1}
+            }
+            if(this.data()['Writing'] != undefined){
+                if(this.data()['Writing'].includes('@*')){all_count[1] += 1}
+            }
+            if(this.data()['Maths'] != undefined){
+                if(this.data()['Maths'].includes('@*')){all_count[2] += 1}
+            }
+            if(this.data()['Grammer'] != undefined){
+                if(this.data()['Grammer'].includes('@*')){all_count[3] += 1}
+            }
+        })
+        for(let value of all_count){
+            all.push(Math.round((value/(rows)) *100) + '%')
+        }
         return all
     }
 
