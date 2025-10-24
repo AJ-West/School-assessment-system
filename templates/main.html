@@ -1,0 +1,87 @@
+<head>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}" />
+    <script src="{{url_for('static', filename='libs/jquery.js')}}"></script>
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>   
+    <script src="{{url_for('static', filename='js/table_creation.js')}}"></script>
+</head>
+
+<body>
+    <h1 id="title" >Foundation</h1>
+    <image id="logo" src="{{url_for('static', filename='images/USF.png')}}"></image>
+    <div id="buttons">
+        <select id="year">
+            <option value="foundation">Foundation</option>
+            <option value="ks1" style="font-weight: bold; color: black;" disabled>KS1</option>
+            <option value="y1">year 1</option>
+            <option value="y2">year 2</option>
+            <option value="ks2" disabled style="font-weight: bold; color: black;">KS1</option>
+            <option value="y3">year 3</option>
+            <option value="y4">year 4</option>
+            <option value="y5">year 5</option>
+            <option value="y6">year 6</option>
+        </select>
+
+        <button id="new_r">Add Row</button>
+        <button id="save">Save</button>
+    </div>
+    
+    <table id="foundation" class="display foundation cell-border">
+        <thead>
+            <tr>
+                <th>Pupils</th>
+                <th>Group</th>
+                <th>C&L</th>
+                <th>PD</th>
+                <th>PSED</th>
+                <th>L</th>
+                <th>M</th>
+                <th>UoW</th>
+                <th>EAD</th>
+                <th>On track for GLD</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <table id="ks1" class="display ks1" style="display: none;">
+        <thead>
+            <tr>
+                <th>Pupils</th>
+                <th>R/W</th>
+                <th>M</th>
+                <th>Group</th>
+                <th>GLD (yes/no)</th>
+                <th>Reading</th>
+                <th>Writing</th>
+                <th>Maths</th>
+                <th>Combined (yes/no)</th>
+                <th>Phonics (scores/40)</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <table id="ks2" class="display ks2" style="display: none;">
+        <thead>
+            <tr>
+                <th>Pupils</th>
+                <th>R/W</th>
+                <th>M</th>
+                <th>Group</th>
+                <th>GLD (yes/no)</th>
+                <th>Phonics (scores/40)</th>
+                <th>Reading</th>
+                <th>Writing</th>
+                <th>Maths</th>
+                <th>Combined (yes/no)</th>
+                <th>Grammer</th>
+                <th>TTables (score/25)</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
