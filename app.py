@@ -14,29 +14,27 @@ def hello_world():
 @app.route('/save_table/<table>', methods=['GET','POST'])
 def save_table(table):
     data = request.get_json()['table']
-    print(table)
     year, stage = table.split(',')
     db = sqlite3.connect('database.db')
     cur = db.cursor()
-    print(data)
-    print(year)
     match stage:
         case 'ks1':
-            print("ks1")
+            cur.execute('DROP TABLE ' + year)
+            cur.execute('CREATE TABLE ' + year + ' (Pupils VARCHAR PRIMARY KEY, g varchar, RW VARCHAR, M VARCHAR,	GLD VARCHAR, Reading VARCHAR, Writing	VARCHAR, Maths VARCHAR, Combined VARCHAR, Phonics VARCHAR);')
             for row in data:
                 try:
                     cur.execute('INSERT INTO '+ year +' VALUES (?,?,?,?,?,?,?,?,?,?)', (row['Pupils'],row['R/W'],row['M'],row['Group'],row['GLD (yes/no)'],row['Reading'],row['Writing'],row['Maths'],row['Combined (yes/no)'],row['Phonics (scores/40)']))
                 except:
                     cur.execute('UPDATE '+ year +' SET Pupils=?, RW=?, M=?, GLD=?, Reading=?, Writing=?, Maths=?, Combined=?, Phonics=? WHERE g = ?', (row['Pupils'],row['R/W'],row['M'],row['GLD (yes/no)'],row['Reading'],row['Writing'],row['Maths'],row['Combined (yes/no)'],row['Phonics (scores/40)'],row['Group']))
         case 'ks2':
-            print("ks2")
+            cur.execute('DROP TABLE ' + year)
+            cur.execute('CREATE TABLE ' + year + ' (Pupils VARCHAR PRIMARY KEY, g varchar, "RW"	VARCHAR,M VARCHAR, GLD VARCHAR,	Phonics	VARCHAR, Reading VARCHAR, Writing VARCHAR, Maths VARCHAR, Combined VARCHAR,	Grammer	VARCHAR, TTables VARCHAR);')
             for row in data:
                 try:
                     cur.execute('INSERT INTO '+ year +' VALUES (?,?,?,?,?,?,?,?,?,?,?,?)', (row['Pupils'],row['R/W'],row['M'],row['Group'],row['GLD (yes/no)'],row['Phonics (scores/40)'],row['Reading'],row['Writing'],row['Maths'],row['Combined (yes/no)'],row['Grammer'],row['TTables (score/25)']))
                 except:
                     cur.execute('UPDATE '+ year +' SET Pupils=?, RW=?, M=?, GLD=?, Phonics=?, Reading=?, Writing=?, Maths=?, Combined=?, Grammer=?, TTables=? WHERE g = ?', (row['Pupils'],row['R/W'],row['M'],row['GLD (yes/no)'],row['Phonics (scores/40)'],row['Reading'],row['Writing'],row['Maths'],row['Combined (yes/no)'],row['Grammer'],row['TTables (score/25)'],row['Group']))
         case _:
-            print("foundation")
             cur.execute('DROP TABLE foundation')
             cur.execute('CREATE TABLE foundation (Pupils VARCHAR PRIMARY KEY, g	varchar, CL	VARCHAR, PD	VARCHAR, PSED VARCHAR, L VARCHAR, M	VARCHAR, UoW VARCHAR, EAD VARCHAR, Otfg	VARCHAR);')
             for row in data:
@@ -44,7 +42,6 @@ def save_table(table):
                     cur.execute('INSERT INTO foundation VALUES (?,?,?,?,?,?,?,?,?,?)', (row['Pupils'],row['Group'],row['C&L'],row['PD'],row['PSED'],row['L'],row['M'],row['UoW'],row['EAD'],row['On track for GLD']))
                 except:
                     cur.execute('UPDATE foundation SET g=?, CL=?, PD=?, PSED=?, L=?, M=?, UoW=?, EAD=?, Otfg=? WHERE Pupils = ?;', (row['Group'],row['C&L'],row['PD'],row['PSED'],row['L'],row['M'],row['UoW'],row['EAD'],row['On track for GLD'],row['Pupils']))
-        #cur.execute('INSERT INTO foundation (Pupils, Group, C&L, PD, PSED, L, M, UoW, EAD, Otfg) VALUES (1,1,1,1,1,1,1,1,1,1)')#, (1,1,1,1,1,1,1,1,1,1))#(row['Pupils'],row['Group'],row['C&L'],row['PD'],row['PSED'],row['L'],row['M'],row['UoW'],row['EAD'],row['On track for GLD']))
     db.commit()
 
     return 'success'

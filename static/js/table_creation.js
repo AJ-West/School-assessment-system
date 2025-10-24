@@ -1,64 +1,3 @@
-/*fdata = [
-    {
-        "Pupils": "1",
-        "Group": "1",
-        "C&L": "1",
-        "PD": "1",
-        "PSED": "1",
-        "L": "1",
-        "M": "1",
-        "UoW": "1",
-        "EAD": "1",
-        "On track for GLD": "1",       
-    },
-    {
-        "Pupils": "2",
-        "Group": "2",
-        "C&L": "2",
-        "PD": "2",
-        "PSED": "2",
-        "L": "2",
-        "M": "2",
-        "UoW": "2",
-        "EAD": "2",
-        "On track for GLD": "2",       
-    }
-]
-
-ks1data = [
-    {
-        'Pupils': "1",
-        'R/W': "1",
-        'M': "1",
-        'Group': "1",
-        'GLD (yes/no)': "1",
-        'Reading': "1",
-        'Writing': "1",
-        'Maths': "1",
-        'Combined (yes/no)': "1",
-        'Phonics (scores/40)': "1",
-    }
-]
-
-ks2data = [
-    {
-        'Pupils': "1",
-        'R/W': "1",
-        'M': "1",
-        'Group': "1",
-        'GLD (yes/no)': "1",
-        'Phonics (scores/40)': "1",
-        'Reading': "1",
-        'Writing': "1",
-        'Maths': "1",
-        'Combined (yes/no)': "1",
-        'Grammer': "1",
-        'TTables (score/25)': "1", 
-    }
-]*/
-
-//#968009
-
 fcolumns = [{data: 'Pupils'},
             {data: 'Group'},
             {data: 'C&L'},
@@ -177,18 +116,10 @@ $(document).ready(function(){
 
     function click_cell(cell){
         table = new DataTable(cell.parentElement.parentElement.parentElement)
-        console.log(table.cell(cell)[0][0]['row']);
-        console.log(table.cell(cell)[0][0]['column']);
-        console.log(table.cell(cell).data());
     }
 
     function blur_cell(cell){
         table = new DataTable(cell.parentElement.parentElement.parentElement)
-        /*console.log($(table.cell(cell).node()).html());
-        console.log(table.cell(cell)[0][0]['row']);
-        console.log(table.cell(cell)[0][0]['column']);
-        //console.log(table.cell(cell).data());*/
-        //console.log(table.cell(cell));
         //change specific cell data
         table.cell(table.cell(cell)[0][0]['row'],table.cell(cell)[0][0]['column']).data($(table.cell(cell).node()).html()).draw()
         check_on_track(table.cell(cell)[0][0]['row'])
@@ -358,7 +289,6 @@ $(document).ready(function(){
         for(var i=5; i<9;i++){
             var track_count = 0
             for(var j=0; j < rows+removed; j++){
-                console.log(table.cell(j,i).data())
                 if(table.cell(j,i).data() != undefined){
                     if(!(table.cell(j,i).data().includes('@-') || table.cell(j,i).data().includes('no'))){track_count += 1}
                 }
@@ -375,7 +305,6 @@ $(document).ready(function(){
         }
         percentage = Math.round((track_count/(rows)) *100) + '%'
         all.push(percentage)
-        console.log(all)
         return all
     }
 
@@ -425,7 +354,6 @@ $(document).ready(function(){
             for (var i=0; i<allData.length-2; i++){
                 rows.push(allData[i])
             }
-        console.log(table_stage)
         $.ajax({
             url: '/save_table/' + table_name+','+table_stage,
             type: 'POST',
