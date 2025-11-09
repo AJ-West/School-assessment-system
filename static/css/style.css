@@ -43,6 +43,16 @@ span, td, td.dt-type-numeric {
     text-align: center !important;
 }
 
+.delete-btn {
+    margin: 10px;
+    background-color: #968009;
+    border-color: black;
+    border-width: 5px;
+    width: 50%;
+    text-align: center;
+    text-align-last: center;
+}
+
 .pass{
     background-color: lime;
 }

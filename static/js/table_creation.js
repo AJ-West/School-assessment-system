@@ -7,7 +7,13 @@ fcolumns = [{data: 'Pupils'},
             {data: 'M'},
             {data: 'UoW'},
             {data: 'EAD'},
-            {data: 'On track for GLD'}]
+            {data: 'On track for GLD'},
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button class="delete-btn">Delete</button>';
+                }
+            }]
             
 ks1columns = [{data: 'Pupils'},
             {data: 'R/W'},
@@ -18,7 +24,13 @@ ks1columns = [{data: 'Pupils'},
             {data: 'Writing'},
             {data: 'Maths'},
             {data: 'Combined (yes/no)'},
-            {data: 'Phonics (scores/40)'}]
+            {data: 'Phonics (scores/40)'},
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button class="delete-btn">Delete</button>';
+                }
+            }]
 
 ks2columns = [{data: 'Pupils'},
             {data: 'R/W'},
@@ -31,7 +43,13 @@ ks2columns = [{data: 'Pupils'},
             {data: 'Maths'},
             {data: 'Combined (yes/no)'},
             {data: 'Grammer'},
-            {data: 'TTables (score/25)'}]
+            {data: 'TTables (score/25)'},
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return '<button class="delete-btn">Delete</button>';
+                }
+            }]
 
 $(document).ready(function(){
     function load_foundation(data){
@@ -108,7 +126,11 @@ $(document).ready(function(){
         table_name = 'foundation'
         table_stage = 'foundation'
 
-        document.querySelectorAll('td').forEach(cell => {cell.contentEditable = true})
+        document.querySelectorAll('td').forEach(cell => {
+            // don't make the action cell (with delete button) editable
+            if(cell.querySelector && cell.querySelector('.delete-btn')) return
+            cell.contentEditable = true
+        })
         for(let i =0; i<json.length; i++){check_on_track(i)}
         add_on_track_row()
     })
@@ -240,7 +262,11 @@ $(document).ready(function(){
                 table.row.add({'Pupils': "", 'R/W': "", 'M': "", 'Group': "", 'GLD (yes/no)': "", 'Phonics (scores/40)': "", 'Reading': "", 'Writing': "", 'Maths': "", 'Combined (yes/no)': "", 'Grammer': "", 'TTables (score/25)': ""}).draw(false)
                 break
         }           
-        document.querySelectorAll('td').forEach(cell => {cell.contentEditable = true})
+        document.querySelectorAll('td').forEach(cell => {
+            // don't make the action cell (with delete button) editable
+            if(cell.querySelector && cell.querySelector('.delete-btn')) return
+            cell.contentEditable = true
+        })
         add_on_track_row()
     }
 
@@ -461,6 +487,40 @@ $(document).ready(function(){
         }).then(response => {console.log(response)})
     }
 
+    // Delete row handler: sends delete request to server and removes row from table on success
+    $(document).on('click', '.delete-btn', function(e){
+        e.preventDefault();
+        // row in DataTable
+        var $tr = $(this).closest('tr');
+        var row = table.row($tr);
+        var rowData = row.data();
+        if(!rowData){ return }
+        var pupil = rowData['Pupils'] || rowData.Pupils;
+        // don't allow deleting summary rows (N/A)
+        if(!pupil || pupil === 'N/A'){
+            return
+        }
+        if(!confirm('Delete pupil "' + pupil + '"?')){ return }
+
+        $.ajax({
+            url: '/delete_row/' + table_name + ',' + table_stage,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({'Pupils': pupil})
+        }).then(response => {
+            console.log('delete response', response)
+            if(response === 'success' || (response && response.status === 'success')){
+                row.remove().draw();
+                update_percentages();
+            } else {
+                alert('Delete failed: ' + response)
+            }
+        }).catch(err => {
+            console.error(err)
+            alert('Delete request failed')
+        })
+    })
+
     $('#year').on('change', async function(){
         removed = 0
         await save_year()
@@ -517,7 +577,11 @@ $(document).ready(function(){
                     add_on_track_row()
                     break
             }  
-            document.querySelectorAll('td').forEach(cell => {cell.contentEditable = true})
+            document.querySelectorAll('td').forEach(cell => {
+            // don't make the action cell (with delete button) editable
+            if(cell.querySelector && cell.querySelector('.delete-btn')) return
+            cell.contentEditable = true
+        })
             for(let i =0; i<json.length; i++){check_on_track(i)}
         })
         switch (table_name){

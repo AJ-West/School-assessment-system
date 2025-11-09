@@ -54,6 +54,34 @@ def load_table(table):
     data = cur.fetchall()
     return jsonify(data)
 
+@app.route('/delete_row/<table>', methods=['POST'])
+def delete_row(table):
+    # table is passed as "year,stage" (e.g. 'y1,ks1' or 'foundation,foundation')
+    try:
+        year, stage = table.split(',')
+    except Exception:
+        return 'invalid table', 400
+
+    # whitelist allowed table names to avoid SQL injection via table name
+    allowed = ['foundation','y1','y2','y3','y4','y5','y6']
+    if year not in allowed:
+        return 'invalid year', 400
+
+    data = request.get_json() or {}
+    pupil = data.get('Pupils') or data.get('pupil') or data.get('Pupil')
+    if not pupil:
+        return 'missing pupil', 400
+
+    db = sqlite3.connect('database.db')
+    cur = db.cursor()
+    try:
+        cur.execute('DELETE FROM ' + year + ' WHERE Pupils = ?', (pupil,))
+        db.commit()
+    except Exception as e:
+        return str(e), 500
+
+    return 'success'
+
 if __name__ == '__main__':
     port = 5000 + random.randint(0, 999)
     url = "http://127.0.0.1:{}/{}".format(port, "main")
