@@ -180,18 +180,29 @@ $(document).ready(function(){
     
     function ks1_on_track(row){
         var on_track = 'yes'
+        var on_track_star = true
+        var had_star = false
         for(var i=5; i < 8; i++){
             $(table.cell(row,i).node()).removeClass('pass fail')
             if(table.cell(row,i).data().includes('@-') && !table.cell(row,i).data().includes('*')){
                 $(table.cell(row,i).node()).addClass('fail')
                 on_track = 'no'
+                on_track_star = false
             }
-            else if (table.cell(row,i).data().includes('@*')){$(table.cell(row,i).node()).addClass('excel')}
-            else if (table.cell(row,i).data().includes('@')){$(table.cell(row,i).node()).addClass('pass')}
+            else if (table.cell(row,i).data().includes('@*')){
+                $(table.cell(row,i).node()).addClass('excel')
+                had_star = true
+            }
+            else if (table.cell(row,i).data().includes('@')){
+                $(table.cell(row,i).node()).addClass('pass')
+                on_track_star = false
+            }
+            else{on_track_star = false}
         }
-        $(table.cell(row,8).node()).removeClass('pass fail')
+        $(table.cell(row,8).node()).removeClass('pass fail excel')
         table.cell(row,8).data(on_track).draw()
-        if (on_track == 'yes'){$(table.cell(row,8).node()).addClass('pass')}
+        if (on_track_star && had_star && on_track == 'yes'){$(table.cell(row,8).node()).addClass('excel')}
+        else if (on_track == 'yes'){$(table.cell(row,8).node()).addClass('pass')}
         else{$(table.cell(row,8).node()).addClass('fail')}
 
         $(table.cell(row,4).node()).removeClass('pass fail')
@@ -210,24 +221,35 @@ $(document).ready(function(){
     
     function ks2_on_track(row){
         var on_track = 'yes'
+        var on_track_star = true
+        var had_star = false
         for(var i=6; i < 9; i++){
             $(table.cell(row,i).node()).removeClass('pass fail')
             if(table.cell(row,i).data().includes('@-') && !table.cell(row,i).data().includes('*')){
                 $(table.cell(row,i).node()).addClass('fail')
                 on_track = 'no'
+                on_track_star = false
             }
-            else if (table.cell(row,i).data().includes('@*')){$(table.cell(row,i).node()).addClass('excel')}
-            else if (table.cell(row,i).data().includes('@')){$(table.cell(row,i).node()).addClass('pass')}
+            else if (table.cell(row,i).data().includes('@*')){
+                $(table.cell(row,i).node()).addClass('excel')
+                had_star = true
+            }
+            else if (table.cell(row,i).data().includes('@')){
+                $(table.cell(row,i).node()).addClass('pass')
+                on_track_star = false
+            }
+            else{on_track_star = false}
         }
 
-        $(table.cell(row,10).node()).removeClass('pass fail')
+        $(table.cell(row,10).node()).removeClass('pass fail excel')
         if(table.cell(row,10).data().includes('@-') && !table.cell(row,10).data().includes('*')){$(table.cell(row,10).node()).addClass('fail')}
         else if (table.cell(row,10).data().includes('@*')){$(table.cell(row,10).node()).addClass('excel')}
         else if (table.cell(row,10).data().includes('@')){$(table.cell(row,10).node()).addClass('pass')}
 
         $(table.cell(row,9).node()).removeClass('pass fail')
         table.cell(row,9).data(on_track).draw()
-        if (on_track == 'yes'){$(table.cell(row,9).node()).addClass('pass')}
+        if (on_track_star && had_star && on_track == 'yes'){$(table.cell(row,9).node()).addClass('excel')}
+        else if (on_track == 'yes'){$(table.cell(row,9).node()).addClass('pass')}
         else{$(table.cell(row,9).node()).addClass('fail')}
 
         $(table.cell(row,4).node()).removeClass('pass fail')
@@ -283,7 +305,7 @@ $(document).ready(function(){
                 newrow = {'Pupils': "N/A", 'R/W': "N/A", 'M': "N/A", 'Group': "N/A", 'GLD (yes/no)': all[0], 'Reading': all[1], 'Writing': all[2], 'Maths': all[3], 'Combined (yes/no)': all[4], 'Phonics (scores/40)': all[5]}
                 table.row.add(newrow).draw()
                 all = populate_excel_on_track_row_ks1()
-                newrow = {'Pupils': "N/A", 'R/W': "N/A", 'M': "N/A", 'Group': "N/A", 'GLD (yes/no)': "N/A", 'Reading': all[0], 'Writing': all[1], 'Maths': all[2], 'Combined (yes/no)': "N/A", 'Phonics (scores/40)': "N/A"}
+                newrow = {'Pupils': "N/A", 'R/W': "N/A", 'M': "N/A", 'Group': "N/A", 'GLD (yes/no)': "N/A", 'Reading': all[0], 'Writing': all[1], 'Maths': all[2], 'Combined (yes/no)': all[3], 'Phonics (scores/40)': "N/A"}
                 table.row.add(newrow).draw()
                 break
             default:
@@ -291,7 +313,7 @@ $(document).ready(function(){
                 newrow = {'Pupils': "N/A", 'R/W': "N/A", 'M': "N/A", 'Group': "N/A", 'GLD (yes/no)': all[0], 'Phonics (scores/40)': all[1], 'Reading': all[2], 'Writing': all[3], 'Maths': all[4], 'Combined (yes/no)': all[5], 'Grammer': all[6], 'TTables (score/25)': all[7]}
                 table.row.add(newrow).draw()
                 all = populate_excel_on_track_row_ks2()
-                newrow = {'Pupils': "N/A", 'R/W': "N/A", 'M': "N/A", 'Group': "N/A", 'GLD (yes/no)': "N/A", 'Phonics (scores/40)': "N/A", 'Reading': all[0], 'Writing': all[1], 'Maths': all[2], 'Combined (yes/no)': "N/A", 'Grammer': all[3], 'TTables (score/25)': "N/A"}
+                newrow = {'Pupils': "N/A", 'R/W': "N/A", 'M': "N/A", 'Group': "N/A", 'GLD (yes/no)': "N/A", 'Phonics (scores/40)': "N/A", 'Reading': all[0], 'Writing': all[1], 'Maths': all[2], 'Combined (yes/no)': all[3], 'Grammer': all[4], 'TTables (score/25)': "N/A"}
                 table.row.add(newrow).draw()
                 break
         }        
@@ -426,17 +448,28 @@ $(document).ready(function(){
     function populate_excel_on_track_row_ks1(){
         var all = []
         var rows = table.rows().count()-1
-        var all_count = [0,0,0]
+        var all_count = [0,0,0,0]
         table.rows().every(function(){
+            var count = 0
             if(this.data()['Reading'] != undefined){
-                if(this.data()['Reading'].includes('@*')){all_count[0] += 1}
+                if(this.data()['Reading'].includes('@*')){
+                    all_count[0] += 1
+                    count += 1
+                }
             }
             if(this.data()['Writing'] != undefined){
-                if(this.data()['Writing'].includes('@*')){all_count[1] += 1}
+                if(this.data()['Writing'].includes('@*')){
+                    all_count[1] += 1
+                    count += 1
+                }
             }
             if(this.data()['Maths'] != undefined){
-                if(this.data()['Maths'].includes('@*')){all_count[2] += 1}
+                if(this.data()['Maths'].includes('@*')){
+                    all_count[2] += 1
+                    count += 1
+                }
             }
+            if(count == 3){all_count[3] += 1}
         })
         for(let value of all_count){
             all.push(Math.round((value/(rows)) *100) + '%')
@@ -447,19 +480,30 @@ $(document).ready(function(){
     function populate_excel_on_track_row_ks2(){
         var all = []
         var rows = table.rows().count()-1
-        var all_count = [0,0,0,0]
+        var all_count = [0,0,0,0,0]
         table.rows().every(function(){
+            var count = 0
             if(this.data()['Reading'] != undefined){
-                if(this.data()['Reading'].includes('@*')){all_count[0] += 1}
+                if(this.data()['Reading'].includes('@*')){
+                    all_count[0] += 1
+                    count += 1
+                }
             }
             if(this.data()['Writing'] != undefined){
-                if(this.data()['Writing'].includes('@*')){all_count[1] += 1}
+                if(this.data()['Writing'].includes('@*')){
+                    all_count[1] += 1
+                    count += 1
+                }
             }
             if(this.data()['Maths'] != undefined){
-                if(this.data()['Maths'].includes('@*')){all_count[2] += 1}
+                if(this.data()['Maths'].includes('@*')){
+                    all_count[2] += 1
+                    count += 1
+                }
             }
+            if(count == 3){all_count[3] += 1}
             if(this.data()['Grammer'] != undefined){
-                if(this.data()['Grammer'].includes('@*')){all_count[3] += 1}
+                if(this.data()['Grammer'].includes('@*')){all_count[4] += 1}
             }
         })
         for(let value of all_count){
@@ -538,8 +582,7 @@ $(document).ready(function(){
                         columns: fcolumns,
                         info: false,
                         ordering: false,
-                        paging: false,
-                        searching: false
+                        paging: false
                     })
                     add_on_track_row()
                     break
@@ -555,8 +598,7 @@ $(document).ready(function(){
                         columns: ks1columns,
                         info: false,
                         ordering: false,
-                        paging: false,
-                        searching: false
+                        paging: false
                     })
                     add_on_track_row()
                     break
@@ -571,8 +613,7 @@ $(document).ready(function(){
                         columns: ks2columns,
                         info: false,
                         ordering: false,
-                        paging: false,
-                        searching: false
+                        paging: false
                     })
                     add_on_track_row()
                     break
